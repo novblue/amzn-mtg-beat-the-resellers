@@ -97,10 +97,10 @@ amazon-monitor --headless
 ### All Options
 
 ```
---email                    Amazon email address
---password-encrypted       Encrypted Amazon password
---url                     Product URL to monitor
---interval                Check interval in seconds
+--email                  Amazon email address
+--password-encrypted     Encrypted Amazon password
+--url                    Product URL to monitor
+--interval               Check interval in seconds
 --headless               Run in headless mode
 --cookie-file            Cookie file path
 --enable-anti-detection  Enable anti-detection measures
