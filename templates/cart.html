@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mock Amazon - Shopping Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #fff;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .cart-container {
+            background-color: #fff;
+            padding: 20px;
+        }
+        .cart-header {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        .cart-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            border-radius: 4px;
+        }
+        .item-image {
+            width: 180px;
+            height: 180px;
+            background-color: #f8f8f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        .item-details {
+            flex: 1;
+        }
+        .item-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .item-price {
+            font-size: 18px;
+            color: #B12704;
+            margin-bottom: 10px;
+        }
+        .item-shipping {
+            color: #565959;
+            margin-bottom: 5px;
+        }
+        .preorder-label {
+            color: #007600;
+            font-weight: bold;
+        }
+        .summary {
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        .summary-total {
+            font-size: 18px;
+            text-align: right;
+            margin-bottom: 15px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #FFD814;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .empty-cart {
+            text-align: center;
+            padding: 40px;
+            color: #565959;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Mock Amazon</h1>
+        <div>
+            {% if session.logged_in %}
+            <span id="nav-link-accountList">Hello, {{ session.name }}</span>
+            {% else %}
+            <a href="{{ url_for('signin') }}" id="nav-link-accountList">Sign In</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="cart-container">
+        <div class="cart-header">Shopping Cart</div>
+
+        {% if item %}
+        <div class="cart-item">
+            <div class="item-image">Product Image</div>
+            <div class="item-details">
+                <div class="item-title">{{ item.title }}</div>
+                <div class="item-price">${{ item.price }}</div>
+                <div class="item-shipping">Release date: {{ item.release_date }}</div>
+                <div class="preorder-label">Pre-order</div>
+            </div>
+        </div>
+
+        <div class="summary">
+            <div class="summary-total">Subtotal (1 item): ${{ item.price }}</div>
+            <form action="{{ url_for('checkout') }}" method="post">
+                <button type="submit" name="proceedToRetailCheckout" class="button">Proceed to checkout</button>
+            </form>
+        </div>
+        {% else %}
+        <div class="empty-cart">
+            <h2>Your Amazon Cart is empty</h2>
+            <p>Browse Amazon products and add items to your cart</p>
+            <a href="{{ url_for('home') }}">Go to home page</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>

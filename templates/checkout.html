@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mock Amazon - Checkout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #fff;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .checkout-container {
+            display: flex;
+            gap: 30px;
+        }
+        .checkout-form {
+            flex: 2;
+        }
+        .order-summary {
+            flex: 1;
+            background-color: #f7f7f7;
+            padding: 20px;
+            border-radius: 4px;
+            height: fit-content;
+        }
+        .form-section {
+            margin-bottom: 25px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+        }
+        .form-section h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #FFD814;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            text-align: center;
+        }
+        .section-complete {
+            color: #007600;
+            font-size: 12px;
+            float: right;
+        }
+        .item-details {
+            display: flex;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .item-image {
+            width: 60px;
+            height: 60px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 10px;
+            text-align: center;
+        }
+        .price-summary {
+            margin-top: 15px;
+        }
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .total-row {
+            font-weight: bold;
+            font-size: 18px;
+            padding-top: 8px;
+            border-top: 1px solid #ddd;
+        }
+        .release-note {
+            font-size: 13px;
+            color: #555;
+            margin-top: 10px;
+        }
+        .submitOrderButtonId {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Checkout</h1>
+        <div>
+            {% if session.logged_in %}
+            <span id="nav-link-accountList">Hello, {{ session.name }}</span>
+            {% else %}
+            <a href="{{ url_for('signin') }}" id="nav-link-accountList">Sign In</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="checkout-container">
+        <div class="checkout-form">
+            <div class="form-section">
+                <h3>1. Shipping address <span class="section-complete">✓ Complete</span></h3>
+                <p>John Doe<br>
+                    123 Main St<br>
+                    Apt 4B<br>
+                    Anytown, CA 90210<br>
+                    United States<br>
+                    Phone: 555-123-4567</p>
+            </div>
+
+            <div class="form-section">
+                <h3>2. Payment method <span class="section-complete">✓ Complete</span></h3>
+                <p>MasterCard ending in 1234</p>
+            </div>
+
+            <div class="form-section">
+                <h3>3. Review items and shipping</h3>
+
+                <div class="item-details">
+                    <div class="item-image">Item Image</div>
+                    <div>
+                        <h4>{{ item.title }}</h4>
+                        <p>${{ item.price }}</p>
+                        <p class="release-note">Pre-order: Expected ship date: {{ item.release_date }}</p>
+                        <p>Qty: 1</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h4>Shipping Details</h4>
+                    <p>FREE Prime Delivery on release day</p>
+                </div>
+            </div>
+
+            <form action="{{ url_for('place_order') }}" method="post">
+                <button type="submit" class="button submitOrderButtonId" id="submitOrderButtonId">Place your order</button>
+            </form>
+        </div>
+
+        <div class="order-summary">
+            <h3>Order Summary</h3>
+
+            <div class="price-summary">
+                <div class="price-row">
+                    <span>Items:</span>
+                    <span>${{ item.price }}</span>
+                </div>
+                <div class="price-row">
+                    <span>Shipping:</span>
+                    <span>FREE</span>
+                </div>
+                <div class="price-row">
+                    <span>Estimated tax:</span>
+                    <span>${{ "%.2f" | format(item.price * 0.0825) }}</span>
+                </div>
+                <div class="price-row total-row">
+                    <span>Order total:</span>
+                    <span>${{ "%.2f" | format(item.price * 1.0825) }}</span>
+                </div>
+            </div>
+
+            <p class="release-note">You won't be charged until the item ships.</p>
+
+            <button type="submit" form="order-form" class="button submitOrderButtonId" id="submitOrderButtonId">Place your order</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
